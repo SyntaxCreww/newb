@@ -157,14 +157,14 @@ export default function LightsScene({
                 ))}
 
                 {/* Decorative Table */}
-                <motion.img
+                {/* <motion.img
                   src="/images/table.png"
                   alt="Decorative Table"
                   className="absolute bottom-0 w-full max-w-3xl mx-auto z-20"
                   initial={{ y: 100, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 2, duration: 1 }}
-                />
+                /> */}
 
                 {/* Final Surprise Button */}
                 {showFinalButton && (
