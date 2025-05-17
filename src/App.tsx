@@ -20,38 +20,72 @@ export default function App() {
 
   return (
     <div className="relative min-h-screen overflow-hidden">
-      {/* Hidden audio always mounted */}
       <audio ref={audioRef} src="/music/music.mp3" loop hidden />
 
       {/* Music Modal */}
-      {currentStep === 0 && (
-        <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+      <AnimatePresence>
+        {currentStep === 0 && (
           <motion.div
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            className="bg-white rounded-xl p-8 shadow-2xl text-center space-y-4 max-w-sm"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 backdrop-blur-3xl"
           >
-            <h2 className="text-2xl font-bold text-pink-600">Hey Love! 💖</h2>
-            <p className="text-gray-700 text-lg">
-              Shall we play a song while you explore your surprise?
-            </p>
-            <div className="flex justify-center gap-4 pt-4">
-              <button
-                onClick={() => handleMusicChoice(true)}
-                className="px-4 py-2 bg-pink-500 text-white rounded-full hover:bg-pink-600"
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              className="bg-gradient-to-br from-pink-500 to-purple-600 rounded-2xl p-8 shadow-2xl text-center space-y-4 max-w-sm relative overflow-hidden"
+            >
+              <motion.div
+                className="absolute inset-0 border-2 border-white/20 rounded-2xl"
+                animate={{
+                  borderColor: [
+                    "rgba(255,255,255,0.2)",
+                    "rgba(255,255,255,0.5)",
+                    "rgba(255,255,255,0.2)",
+                  ],
+                }}
+                transition={{ duration: 2, repeat: Infinity }}
+              />
+
+              <motion.h2
+                className="text-3xl font-bold text-white mb-4"
+                animate={{ scale: [1, 1.05, 1] }}
+                transition={{ duration: 2, repeat: Infinity }}
               >
-                Yes, play it 🎶
-              </button>
-              <button
-                onClick={() => handleMusicChoice(false)}
-                className="px-4 py-2 bg-gray-300 text-gray-800 rounded-full hover:bg-gray-400"
-              >
-                No thanks
-              </button>
-            </div>
+                Hey Love! 💖
+              </motion.h2>
+
+              <p className="text-white/90 text-lg mb-6">
+                Shall we play a song while you explore your surprise? 🎵
+              </p>
+
+              <div className="flex flex-col gap-4">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="px-6 py-3 bg-white/20 backdrop-blur-lg text-white rounded-xl
+                    font-semibold hover:bg-white/30 transition-all"
+                  onClick={() => handleMusicChoice(true)}
+                >
+                  Yes, play music 🎶
+                </motion.button>
+
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="px-6 py-3 bg-black/20 backdrop-blur-lg text-white/80 rounded-xl
+                    font-semibold hover:bg-black/30 transition-all"
+                  onClick={() => handleMusicChoice(false)}
+                >
+                  Continue quietly 🤫
+                </motion.button>
+              </div>
+            </motion.div>
           </motion.div>
-        </div>
-      )}
+        )}
+      </AnimatePresence>
 
       {/* Scenes */}
       <AnimatePresence mode="wait">
