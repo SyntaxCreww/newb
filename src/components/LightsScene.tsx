@@ -12,7 +12,6 @@ export default function LightsScene({
   const [width, height] = useWindowSize();
   const [isAnimating, setIsAnimating] = useState(true);
 
-  // Sequence animations
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowButton(true);
