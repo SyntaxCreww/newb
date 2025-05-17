@@ -1,14 +1,6 @@
 import { motion } from "framer-motion";
-import { useState } from "react";
 
 export default function LandingScene({ onStart }: { onStart: () => void }) {
-  const [isPlaying, setIsPlaying] = useState(false);
-
-  const handlePlay = async () => {
-    await onStart(); // audio plays from App
-    setIsPlaying(true);
-  };
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-800 to-pink-600 flex flex-col items-center justify-center p-4 text-center relative overflow-hidden">
       <motion.div
@@ -35,17 +27,13 @@ export default function LandingScene({ onStart }: { onStart: () => void }) {
           whileTap={{ scale: 0.95 }}
           className="bg-white/20 backdrop-blur-lg text-pink-100 px-8 py-3 rounded-full
             text-lg font-semibold hover:bg-white/30 transition-all shadow-xl"
-          onClick={handlePlay}
+          onClick={onStart}
         >
-          {isPlaying ? (
-            <span className="flex items-center gap-2">
-              <span className="animate-pulse">🎶 Playing...</span>
-            </span>
-          ) : (
-            "Yes, Let's Begin! 🎉"
-          )}
+          Let's Begin! 🎉
         </motion.button>
       </motion.div>
+
+      {/* Optional animated background */}
     </div>
   );
 }
