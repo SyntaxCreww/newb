@@ -8,216 +8,216 @@ export default function LightsScene({
   onComplete: () => void;
 }) {
   const [lightsOn, setLightsOn] = useState(false);
+  const [decorate, setDecorate] = useState(false);
+  const [showFinalButton, setShowFinalButton] = useState(false);
   const [width, height] = useWindowSize();
-  const [showButton, setShowButton] = useState(false);
+
+  // Name configuration for ANJALI
+  const nameLetters = [
+    { letter: "A", image: "/images/A.png" },
+    { letter: "N", image: "/images/N.png" },
+    { letter: "J", image: "/images/J.png" },
+    { letter: "A", image: "/images/A.png" },
+    { letter: "L", image: "/images/L.png" },
+    { letter: "I", image: "/images/I.png" },
+  ];
+
+  // Balloon types configuration
+  const balloonImages = ["/images/ballon.png", "/images/ballon2.png"];
 
   useEffect(() => {
-    const timer = setTimeout(() => setShowButton(true), 1000);
-    return () => clearTimeout(timer);
-  }, []);
+    if (decorate) {
+      const timer = setTimeout(() => setShowFinalButton(true), 8000);
+      return () => clearTimeout(timer);
+    }
+  }, [decorate]);
+
+  const playBalloonSound = () => {
+    new Audio("/images/ballonburst.mp3").play();
+  };
 
   return (
-    <div className="min-h-screen bg-black flex flex-col items-center justify-center p-4 text-center relative overflow-hidden">
-      {/* Room Structure */}
-      <div className="absolute inset-0">
-        {/* Ceiling Shadow */}
-        <motion.div
-          className="h-1/3 w-full bg-black"
-          animate={{ opacity: lightsOn ? 0.2 : 1 }}
-        />
-        {/* Floor */}
-        <motion.div
-          className="h-2/3 w-full bg-gradient-to-t from-gray-900 via-gray-800 to-gray-700"
-          animate={{ opacity: lightsOn ? 0.6 : 0.2 }}
-        />
-      </div>
-
-      {/* Light Switch Button */}
+    <div className="min-h-screen bg-gradient-to-b from-purple-900 to-pink-900 flex flex-col items-center justify-center p-4 text-center relative overflow-hidden">
+      {/* Light Switch Section */}
       <AnimatePresence>
-        {showButton && !lightsOn && (
+        {!lightsOn && (
           <motion.div
-            initial={{ scale: 0, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0, opacity: 0 }}
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            exit={{ scale: 0 }}
             className="z-30"
           >
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => setLightsOn(true)}
-              className="bg-gradient-to-r from-yellow-400 to-amber-500 text-black px-8 py-4 rounded-xl
-                text-xl font-bold shadow-2xl backdrop-blur-lg relative overflow-hidden
-                border-2 border-yellow-300/50 transition-all duration-300 hover:shadow-3xl"
+              className="bg-gradient-to-r from-pink-400 to-purple-500 text-white px-8 py-4 rounded-2xl
+                text-2xl font-bold shadow-2xl backdrop-blur-lg border-2 border-white/20
+                hover:shadow-3xl transition-all duration-300"
             >
-              <motion.div
-                className="absolute inset-0 bg-gradient-to-r from-white/30 via-transparent to-white/30"
-                animate={{ x: [-200, 200] }}
-                transition={{ duration: 1.5, repeat: Infinity }}
-              />
-              <span className="relative z-10 flex items-center gap-2">
-                💡 Illuminate the Room
-              </span>
+              💡 Turn On the Lights
             </motion.button>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Full-room Lighting Effects */}
+      {/* Main Decoration Section */}
       <AnimatePresence>
         {lightsOn && (
-          <>
-            {/* Base Room Lighting */}
+          <div className="absolute inset-0">
+            {/* Ambient Light */}
             <motion.div
-              className="absolute inset-0 bg-gradient-to-b from-yellow-200/20 to-yellow-100/10"
+              className="absolute inset-0 bg-gradient-to-b from-pink-200/20 to-purple-300/10"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ duration: 1.5 }}
+              transition={{ duration: 1 }}
             />
 
-            {/* Central Light Beam */}
-            <motion.div
-              className="absolute inset-0 bg-radial-gradient(at 50% 30%, rgba(255,240,180,0.4), transparent 60%)"
-              initial={{ scale: 0.5, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 1.5 }}
-            />
-
-            {/* Floor Reflection */}
-            <motion.div
-              className="absolute bottom-0 h-1/3 w-full bg-gradient-to-t from-yellow-200/15 to-transparent"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.5 }}
-            />
-
-            {/* Light Particles */}
-            <div className="absolute inset-0 pointer-events-none">
-              {[...Array(120)].map((_, i) => (
-                <motion.div
-                  key={i}
-                  className="absolute w-1 h-1 bg-yellow-300 rounded-full"
-                  style={{
-                    left: `${Math.random() * 100}%`,
-                    top: `${Math.random() * 100}%`,
-                  }}
-                  initial={{ opacity: 0, scale: 0 }}
-                  animate={{
-                    opacity: [1, 0],
-                    scale: [1, 2],
-                    y: [0, height * 0.7],
-                  }}
-                  transition={{
-                    duration: 2 + Math.random() * 2,
-                    delay: Math.random() * 0.3,
-                  }}
-                />
-              ))}
-            </div>
-
-            {/* Light Rays */}
-            <div className="absolute inset-0 pointer-events-none">
-              {[...Array(15)].map((_, i) => (
-                <motion.div
-                  key={i}
-                  className="absolute w-0.5 h-1/2 bg-gradient-to-b from-yellow-300/30 to-transparent"
-                  style={{
-                    left: `${Math.random() * 100}%`,
-                    transform: `rotate(${Math.random() * 30 - 15}deg)`,
-                  }}
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{
-                    opacity: [0, 0.4, 0],
-                    height: ["0%", "60%", "60%"],
-                  }}
-                  transition={{
-                    duration: 2,
-                    delay: i * 0.1,
-                    repeat: Infinity,
-                  }}
-                />
-              ))}
-            </div>
-
-            {/* Ambient Light Particles */}
-            <div className="absolute inset-0 pointer-events-none">
-              {[...Array(80)].map((_, i) => (
-                <motion.div
-                  key={i}
-                  className="absolute w-1 h-1 bg-yellow-200/30 rounded-full"
-                  style={{
-                    left: `${Math.random() * 100}%`,
-                    top: `${Math.random() * 100}%`,
-                  }}
-                  animate={{
-                    y: [0, -50],
-                    opacity: [0.3, 0],
-                    scale: [1, 0.5],
-                  }}
-                  transition={{
-                    duration: 5 + Math.random() * 5,
-                    repeat: Infinity,
-                    delay: Math.random() * 3,
-                  }}
-                />
-              ))}
-            </div>
-
-            {/* Continue Button */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
-              className="mt-12"
-            >
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="bg-white/15 backdrop-blur-xl text-yellow-300 px-8 py-4 rounded-xl
-                  text-xl font-bold shadow-2xl border-2 border-yellow-300/40
-                  hover:bg-white/25 transition-all duration-300"
-                onClick={onComplete}
+            {/* Decoration Trigger Button */}
+            {!decorate && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="flex justify-center mt-12"
               >
-                Enter the Celebration 🌟
-              </motion.button>
-            </motion.div>
-          </>
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => setDecorate(true)}
+                  className="bg-gradient-to-r from-purple-500 to-pink-600 text-white px-8 py-4 rounded-2xl
+                    text-2xl font-bold shadow-2xl backdrop-blur-lg border-2 border-white/30
+                    hover:shadow-3xl transition-all duration-300"
+                >
+                  Let's Decorate! 🎀
+                </motion.button>
+              </motion.div>
+            )}
+
+            {/* Decoration Elements */}
+            {decorate && (
+              <>
+                {/* ANJALI Name Letters */}
+                <div className="absolute top-20 w-full flex justify-center gap-4 z-30">
+                  {nameLetters.map((letter, index) => (
+                    <motion.img
+                      key={letter.letter + index}
+                      src={letter.image}
+                      alt={letter.letter}
+                      className="w-24 h-24 object-contain drop-shadow-2xl"
+                      initial={{ y: -100, opacity: 0, rotate: -30 }}
+                      animate={{ y: 0, opacity: 1, rotate: 0 }}
+                      transition={{
+                        delay: index * 0.2,
+                        type: "spring",
+                        stiffness: 120,
+                        damping: 12,
+                      }}
+                    />
+                  ))}
+                </div>
+
+                {/* Happy Birthday Image */}
+                <motion.img
+                  src="/images/happybirthday.png"
+                  alt="Happy Birthday"
+                  className="absolute top-44 w-96 z-30 mx-auto left-0 right-0"
+                  initial={{ scale: 0, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{
+                    delay: 1.5,
+                    type: "spring",
+                    stiffness: 100,
+                  }}
+                />
+
+                {/* Floating Balloons */}
+                {[...Array(12)].map((_, i) => (
+                  <motion.img
+                    key={`balloon-${i}`}
+                    src={balloonImages[i % 2]}
+                    alt="Balloon"
+                    className="absolute w-28 h-28 z-20 drop-shadow-xl"
+                    style={{
+                      left: `${Math.random() * 100}%`,
+                      bottom: "-100px",
+                    }}
+                    initial={{ y: 0, opacity: 0 }}
+                    animate={{
+                      y: -height - 200,
+                      opacity: [0, 1, 0],
+                      x: Math.random() * 40 - 20,
+                      rotate: [0, 15, -15, 0],
+                    }}
+                    transition={{
+                      duration: 8 + Math.random() * 4,
+                      delay: Math.random() * 1,
+                      ease: "linear",
+                    }}
+                  />
+                ))}
+
+                {/* Decorative Table */}
+                <motion.img
+                  src="/images/table.png"
+                  alt="Decorative Table"
+                  className="absolute bottom-0 w-full max-w-3xl mx-auto z-20"
+                  initial={{ y: 100, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 2, duration: 1 }}
+                />
+
+                {/* Final Surprise Button */}
+                {showFinalButton && (
+                  <motion.div
+                    className="absolute bottom-24 w-full z-40"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                  >
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="bg-gradient-to-r from-pink-500 to-purple-600 text-white px-12 py-6 rounded-2xl
+                        text-3xl font-bold shadow-2xl backdrop-blur-2xl border-2 border-white/30
+                        hover:shadow-3xl transition-all duration-300 mx-auto"
+                      onClick={() => {
+                        playBalloonSound();
+                        onComplete();
+                      }}
+                    >
+                      Ready for Your Surprise! 🌟
+                    </motion.button>
+                  </motion.div>
+                )}
+              </>
+            )}
+          </div>
         )}
       </AnimatePresence>
 
-      {/* Hanging Light Animation */}
-      <motion.div
-        className="absolute top-0 z-20 flex flex-col items-center"
-        initial={{ y: -100 }}
-        animate={{ y: lightsOn ? 0 : -100 }}
-        transition={{ type: "spring", stiffness: 50, damping: 10 }}
-      >
-        <div className="w-0.5 h-24 bg-gray-700/80" />
-        <motion.div
-          className="w-14 h-14 rounded-full bg-yellow-300 relative shadow-2xl"
-          animate={{
-            scale: lightsOn ? [1, 1.1, 1] : 1,
-            opacity: lightsOn ? 1 : 0.3,
-            boxShadow: lightsOn
-              ? [
-                  "0 0 30px 10px rgba(255,230,150,0.4)",
-                  "0 0 50px 20px rgba(255,230,150,0.5)",
-                  "0 0 30px 10px rgba(255,230,150,0.4)",
-                ]
-              : "none",
-          }}
-          transition={{ duration: 2, repeat: Infinity }}
-        >
-          <div className="absolute inset-0 bg-radial-gradient(from at center, rgba(255,255,255,0.5), transparent 60%)" />
-          <div className="absolute inset-0 bg-radial-gradient(from at 30% 30%, rgba(255,255,255,0.3), transparent 70%)" />
-        </motion.div>
-      </motion.div>
-
-      {/* Subtle Ambient Glow */}
-      <motion.div
-        className="absolute inset-0 bg-gradient-to-b from-yellow-200/10 to-transparent"
-        animate={{ opacity: lightsOn ? 0.4 : 0 }}
-        transition={{ duration: 1 }}
-      />
+      {/* Background Particles */}
+      <div className="absolute inset-0 pointer-events-none">
+        {[...Array(50)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-2 h-2 bg-pink-300 rounded-full"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+            }}
+            animate={{
+              y: [0, -100],
+              opacity: [1, 0],
+              scale: [1, 0.5],
+              rotate: 360,
+            }}
+            transition={{
+              duration: 4 + Math.random() * 4,
+              repeat: Infinity,
+              delay: Math.random() * 2,
+            }}
+          />
+        ))}
+      </div>
     </div>
   );
 }
