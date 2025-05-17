@@ -1,11 +1,17 @@
-import React from "react";
+import { useState } from "react";
+import { AnimatePresence } from "framer-motion";
+import LandingScene from "./components/LandingScene";
 
-function App() {
+export default function App() {
+  const [currentStep, setCurrentStep] = useState(1);
+
   return (
-    <h1 className="text-4xl text-red-500  underline">
-      Tailwind is Working in kishlay foldy!
-    </h1>
+    <div className="relative overflow-hidden">
+      <AnimatePresence mode="wait">
+        {currentStep === 1 && (
+          <LandingScene key="landing" onStart={() => setCurrentStep(2)} />
+        )}
+      </AnimatePresence>
+    </div>
   );
 }
-
-export default App;
