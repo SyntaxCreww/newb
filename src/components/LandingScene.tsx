@@ -1,46 +1,76 @@
+// components/LandingScene.tsx
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useState, useRef } from "react";
 
-export default function Scene1Entry({ onYes }: { onYes: () => void }) {
-  const [showButtons, setShowButtons] = useState(false);
+export default function LandingScene({ onStart }: { onStart: () => void }) {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  const handlePlay = async () => {
+    try {
+      if (audioRef.current) {
+        await audioRef.current.play();
+        setIsPlaying(true);
+        onStart(); // Move to next step after music starts
+      }
+    } catch (err) {
+      console.error("Audio playback failed:", err);
+    }
+  };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen text-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-purple-800 to-pink-600 flex flex-col items-center justify-center p-4 text-center relative overflow-hidden">
+      {/* Audio element with your music file */}
+      <audio ref={audioRef} src="/music/music.mpeg" loop />
+
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
-        className="text-4xl font-bold text-pink-200 mb-8"
+        className="space-y-6 z-10"
       >
-        Hey Anjali, can I play a little something for you?
+        <h1 className="text-4xl font-bold text-white mb-4">
+          Hello My Love! 💖
+        </h1>
+
+        <motion.p
+          className="text-xl text-pink-100 mb-8"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+        >
+          Ready for your birthday surprise?
+        </motion.p>
+
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className="bg-white/20 backdrop-blur-lg text-pink-100 px-8 py-3 rounded-full
+            text-lg font-semibold hover:bg-white/30 transition-all shadow-xl"
+          onClick={handlePlay}
+        >
+          {isPlaying ? (
+            <span className="flex items-center gap-2">
+              <span className="animate-pulse">🎶 Playing...</span>
+            </span>
+          ) : (
+            "Yes, Let's Begin! 🎉"
+          )}
+        </motion.button>
       </motion.div>
 
+      {/* Animated background elements */}
       <motion.div
-        initial={{ scale: 0 }}
-        animate={{ scale: 1 }}
-        onAnimationComplete={() => setShowButtons(true)}
-        className="flex gap-4"
-      >
-        {showButtons && (
-          <>
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              className="bg-pink-500 text-white px-6 py-3 rounded-full text-xl"
-              onClick={onYes}
-            >
-              Yes, play it
-            </motion.button>
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              className="bg-gray-500 text-white px-6 py-3 rounded-full text-xl"
-            >
-              Maybe later
-            </motion.button>
-          </>
-        )}
-      </motion.div>
+        className="absolute inset-0 pointer-events-none"
+        animate={{
+          background: [
+            "radial-gradient(circle at 50% 50%, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%)",
+            "radial-gradient(circle at 30% 70%, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0) 100%)",
+            "radial-gradient(circle at 70% 30%, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%)",
+          ],
+        }}
+        transition={{ duration: 10, repeat: Infinity }}
+      />
     </div>
   );
 }
