@@ -1,6 +1,5 @@
 import { motion } from "framer-motion";
 import { useState, useRef } from "react";
-
 export default function LandingScene({ onStart }: { onStart: () => void }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -21,7 +20,6 @@ export default function LandingScene({ onStart }: { onStart: () => void }) {
     <div className="min-h-screen bg-gradient-to-br from-purple-800 to-pink-600 flex flex-col items-center justify-center p-4 text-center relative overflow-hidden">
       {/* Audio element with your music file */}
       <audio ref={audioRef} src="/music/music.mpeg" loop />
-
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
