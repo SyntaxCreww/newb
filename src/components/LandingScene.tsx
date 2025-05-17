@@ -19,7 +19,7 @@ export default function LandingScene({ onStart }: { onStart: () => void }) {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-800 to-pink-600 flex flex-col items-center justify-center p-4 text-center relative overflow-hidden">
-      <audio ref={audioRef} src="/music/music.mp3" loop />
+      <audio ref={audioRef} src="/music/music.mp3" loop controls />
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}
