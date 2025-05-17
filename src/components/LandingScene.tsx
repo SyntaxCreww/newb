@@ -1,26 +1,16 @@
 import { motion } from "framer-motion";
-import { useState, useRef } from "react";
+import { useState } from "react";
 
 export default function LandingScene({ onStart }: { onStart: () => void }) {
   const [isPlaying, setIsPlaying] = useState(false);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const handlePlay = async () => {
-    try {
-      if (audioRef.current) {
-        await audioRef.current.play();
-        setIsPlaying(true);
-        onStart();
-      }
-    } catch (err) {
-      console.error("Audio playback failed:", err);
-    }
+    await onStart(); // audio plays from App
+    setIsPlaying(true);
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-800 to-pink-600 flex flex-col items-center justify-center p-4 text-center relative overflow-hidden">
-      <audio ref={audioRef} src="/music/music.mp3" loop controls />
-
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -56,19 +46,6 @@ export default function LandingScene({ onStart }: { onStart: () => void }) {
           )}
         </motion.button>
       </motion.div>
-
-      {/* Animated background elements */}
-      <motion.div
-        className="absolute inset-0 pointer-events-none"
-        animate={{
-          background: [
-            "radial-gradient(circle at 50% 50%, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%)",
-            "radial-gradient(circle at 30% 70%, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0) 100%)",
-            "radial-gradient(circle at 70% 30%, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%)",
-          ],
-        }}
-        transition={{ duration: 10, repeat: Infinity }}
-      />
     </div>
   );
 }
