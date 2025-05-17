@@ -23,10 +23,13 @@ export default function LightsScene({
         {/* Ceiling Shadow */}
         <motion.div
           className="h-1/3 w-full bg-black"
-          animate={{ opacity: lightsOn ? 0.3 : 1 }}
+          animate={{ opacity: lightsOn ? 0.2 : 1 }}
         />
         {/* Floor */}
-        <div className="h-2/3 w-full bg-gradient-to-t from-gray-900 to-black" />
+        <motion.div
+          className="h-2/3 w-full bg-gradient-to-t from-gray-900 via-gray-800 to-gray-700"
+          animate={{ opacity: lightsOn ? 0.6 : 0.2 }}
+        />
       </div>
 
       {/* Light Switch Button */}
@@ -43,8 +46,8 @@ export default function LightsScene({
               whileTap={{ scale: 0.95 }}
               onClick={() => setLightsOn(true)}
               className="bg-gradient-to-r from-yellow-400 to-amber-500 text-black px-8 py-4 rounded-xl
-                text-xl font-bold shadow-lg backdrop-blur-md relative overflow-hidden
-                border-2 border-yellow-300/50 transition-all duration-300"
+                text-xl font-bold shadow-2xl backdrop-blur-lg relative overflow-hidden
+                border-2 border-yellow-300/50 transition-all duration-300 hover:shadow-3xl"
             >
               <motion.div
                 className="absolute inset-0 bg-gradient-to-r from-white/30 via-transparent to-white/30"
@@ -52,42 +55,50 @@ export default function LightsScene({
                 transition={{ duration: 1.5, repeat: Infinity }}
               />
               <span className="relative z-10 flex items-center gap-2">
-                💡 Turn On Lights
+                💡 Illuminate the Room
               </span>
             </motion.button>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Lighting Effects */}
+      {/* Full-room Lighting Effects */}
       <AnimatePresence>
         {lightsOn && (
           <>
-            {/* Main Light Beam */}
+            {/* Base Room Lighting */}
             <motion.div
-              className="absolute inset-0 bg-gradient-to-b from-yellow-200/40 to-transparent"
+              className="absolute inset-0 bg-gradient-to-b from-yellow-200/20 to-yellow-100/10"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ duration: 1 }}
+              transition={{ duration: 1.5 }}
             />
 
-            {/* Radial Light Spread */}
+            {/* Central Light Beam */}
             <motion.div
-              className="absolute inset-0 bg-radial-gradient(from 50% 0%, rgba(255,240,180,0.4), transparent 70%)"
+              className="absolute inset-0 bg-radial-gradient(at 50% 30%, rgba(255,240,180,0.4), transparent 60%)"
               initial={{ scale: 0.5, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 1.5 }}
             />
 
+            {/* Floor Reflection */}
+            <motion.div
+              className="absolute bottom-0 h-1/3 w-full bg-gradient-to-t from-yellow-200/15 to-transparent"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5 }}
+            />
+
             {/* Light Particles */}
             <div className="absolute inset-0 pointer-events-none">
-              {[...Array(80)].map((_, i) => (
+              {[...Array(120)].map((_, i) => (
                 <motion.div
                   key={i}
                   className="absolute w-1 h-1 bg-yellow-300 rounded-full"
                   style={{
                     left: `${Math.random() * 100}%`,
-                    top: `${Math.random() * 30}%`,
+                    top: `${Math.random() * 100}%`,
                   }}
                   initial={{ opacity: 0, scale: 0 }}
                   animate={{
@@ -105,10 +116,10 @@ export default function LightsScene({
 
             {/* Light Rays */}
             <div className="absolute inset-0 pointer-events-none">
-              {[...Array(12)].map((_, i) => (
+              {[...Array(15)].map((_, i) => (
                 <motion.div
                   key={i}
-                  className="absolute w-0.5 h-1/3 bg-gradient-to-b from-yellow-300/30 to-transparent"
+                  className="absolute w-0.5 h-1/2 bg-gradient-to-b from-yellow-300/30 to-transparent"
                   style={{
                     left: `${Math.random() * 100}%`,
                     transform: `rotate(${Math.random() * 30 - 15}deg)`,
@@ -116,12 +127,36 @@ export default function LightsScene({
                   initial={{ opacity: 0, height: 0 }}
                   animate={{
                     opacity: [0, 0.4, 0],
-                    height: ["0%", "40%", "40%"],
+                    height: ["0%", "60%", "60%"],
                   }}
                   transition={{
                     duration: 2,
                     delay: i * 0.1,
                     repeat: Infinity,
+                  }}
+                />
+              ))}
+            </div>
+
+            {/* Ambient Light Particles */}
+            <div className="absolute inset-0 pointer-events-none">
+              {[...Array(80)].map((_, i) => (
+                <motion.div
+                  key={i}
+                  className="absolute w-1 h-1 bg-yellow-200/30 rounded-full"
+                  style={{
+                    left: `${Math.random() * 100}%`,
+                    top: `${Math.random() * 100}%`,
+                  }}
+                  animate={{
+                    y: [0, -50],
+                    opacity: [0.3, 0],
+                    scale: [1, 0.5],
+                  }}
+                  transition={{
+                    duration: 5 + Math.random() * 5,
+                    repeat: Infinity,
+                    delay: Math.random() * 3,
                   }}
                 />
               ))}
@@ -137,24 +172,17 @@ export default function LightsScene({
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="bg-white/10 backdrop-blur-lg text-yellow-300 px-8 py-4 rounded-xl
-                  text-lg font-bold shadow-lg border-2 border-yellow-300/30
-                  hover:bg-white/20 transition-all duration-300"
+                className="bg-white/15 backdrop-blur-xl text-yellow-300 px-8 py-4 rounded-xl
+                  text-xl font-bold shadow-2xl border-2 border-yellow-300/40
+                  hover:bg-white/25 transition-all duration-300"
                 onClick={onComplete}
               >
-                Continue to Celebration 🌟
+                Enter the Celebration 🌟
               </motion.button>
             </motion.div>
           </>
         )}
       </AnimatePresence>
-
-      {/* Ambient Light Transition */}
-      <motion.div
-        className="absolute inset-0 bg-yellow-100/10"
-        animate={{ opacity: lightsOn ? 1 : 0 }}
-        transition={{ duration: 1.5 }}
-      />
 
       {/* Hanging Light Animation */}
       <motion.div
@@ -163,25 +191,33 @@ export default function LightsScene({
         animate={{ y: lightsOn ? 0 : -100 }}
         transition={{ type: "spring", stiffness: 50, damping: 10 }}
       >
-        <div className="w-0.5 h-24 bg-gray-700" />
+        <div className="w-0.5 h-24 bg-gray-700/80" />
         <motion.div
-          className="w-12 h-12 rounded-full bg-yellow-300 relative shadow-xl"
+          className="w-14 h-14 rounded-full bg-yellow-300 relative shadow-2xl"
           animate={{
             scale: lightsOn ? [1, 1.1, 1] : 1,
             opacity: lightsOn ? 1 : 0.3,
             boxShadow: lightsOn
               ? [
-                  "0 0 20px 5px rgba(255,230,150,0.3)",
                   "0 0 30px 10px rgba(255,230,150,0.4)",
-                  "0 0 20px 5px rgba(255,230,150,0.3)",
+                  "0 0 50px 20px rgba(255,230,150,0.5)",
+                  "0 0 30px 10px rgba(255,230,150,0.4)",
                 ]
               : "none",
           }}
           transition={{ duration: 2, repeat: Infinity }}
         >
-          <div className="absolute inset-0 bg-radial-gradient from-yellow-300/80 to-transparent rounded-full" />
+          <div className="absolute inset-0 bg-radial-gradient(from at center, rgba(255,255,255,0.5), transparent 60%)" />
+          <div className="absolute inset-0 bg-radial-gradient(from at 30% 30%, rgba(255,255,255,0.3), transparent 70%)" />
         </motion.div>
       </motion.div>
+
+      {/* Subtle Ambient Glow */}
+      <motion.div
+        className="absolute inset-0 bg-gradient-to-b from-yellow-200/10 to-transparent"
+        animate={{ opacity: lightsOn ? 0.4 : 0 }}
+        transition={{ duration: 1 }}
+      />
     </div>
   );
 }
