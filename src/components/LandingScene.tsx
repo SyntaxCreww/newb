@@ -1,4 +1,3 @@
-// components/LandingScene.tsx
 import { motion } from "framer-motion";
 import { useState, useRef } from "react";
 
@@ -11,7 +10,7 @@ export default function LandingScene({ onStart }: { onStart: () => void }) {
       if (audioRef.current) {
         await audioRef.current.play();
         setIsPlaying(true);
-        onStart(); // Move to next step after music starts
+        onStart();
       }
     } catch (err) {
       console.error("Audio playback failed:", err);
@@ -32,7 +31,6 @@ export default function LandingScene({ onStart }: { onStart: () => void }) {
         <h1 className="text-4xl font-bold text-white mb-4">
           Hello My Love! 💖
         </h1>
-
         <motion.p
           className="text-xl text-pink-100 mb-8"
           initial={{ opacity: 0 }}
